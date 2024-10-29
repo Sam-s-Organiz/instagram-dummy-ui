@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useEffect, useState } from "react";
 import Post from "@/components/Post";
 import useSWR from "swr";
@@ -54,6 +55,23 @@ const HomePage = () => {
         )}
       </Box>
     </LayoutPage>
+=======
+import Head from "next/head";
+import SignUp from "../dashboard";
+import SignIn from "./signIn";
+// import Claims from "@/components/claims/Claims";
+
+const HomePage = () => {
+  console.log("inside home");
+  return (
+    <>
+      <Head>
+        <title>Insta</title>
+      </Head>
+      <SignUp />
+      <SignIn />
+    </>
+>>>>>>> ef794b59d17c602ae629c703db16dcc06f14a369
   );
 };
 
