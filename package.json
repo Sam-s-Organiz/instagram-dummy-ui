@@ -12,37 +12,15 @@
     "@azure/msal-node": "^1.17.2",
     "@emotion/react": "^11.10.8",
     "@emotion/styled": "^11.10.8",
-    "@fullcalendar/core": "^6.1.6",
-    "@fullcalendar/daygrid": "^6.1.6",
-    "@fullcalendar/interaction": "^6.1.6",
-    "@fullcalendar/react": "^6.1.6",
-    "@fullcalendar/timegrid": "^6.1.6",
     "@mui/icons-material": "^5.11.16",
     "@mui/joy": "^5.0.0-beta.48",
     "@mui/material": "^5.12.3",
     "@mui/x-date-pickers": "^6.13.0",
-    "ag-grid-community": "^29.3.5",
-    "ag-grid-enterprise": "^29.3.5",
-    "ag-grid-react": "^29.3.5",
-<<<<<<< HEAD
-    "axios": "^1.7.7",
-=======
->>>>>>> ef794b59d17c602ae629c703db16dcc06f14a369
     "dotenv": "^16.3.1",
     "html2canvas": "^1.4.1",
     "jotai": "^2.0.4",
     "jotai-immer": "^0.2.0",
     "jspdf": "^2.5.1",
-<<<<<<< HEAD
-    "next": "^14.2.14",
-    "next-auth": "^4.24.8",
-    "next-http-proxy-middleware": "^1.2.6",
-    "next-images": "^1.8.5",
-    "react": "^17.0.0 || ^18.0.0",
-    "react-dom": "^17.0.0 || ^18.0.0",
-    "react-toastify": "^9.1.2",
-    "swr": "^2.2.5",
-=======
     "next": "^14.2.5",
     "next-auth": "^4.24.7",
     "next-http-proxy-middleware": "^1.2.5",
@@ -50,7 +28,6 @@
     "react-dom": "^17.0.0 || ^18.0.0",
     "react-toastify": "^9.1.2",
     "swr": "^2.1.5",
->>>>>>> ef794b59d17c602ae629c703db16dcc06f14a369
     "winston": "^3.8.2",
     "zod": "^3.21.4"
   },

@@ -3,11 +3,8 @@ import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-<<<<<<< HEAD
 import './app/globals.css';
 
-=======
->>>>>>> ef794b59d17c602ae629c703db16dcc06f14a369
 
 const Home: NextPage = () => {
   const router = useRouter();
