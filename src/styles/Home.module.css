@@ -1,0 +1,15 @@
+.home {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .homeBody {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+  }
+  
+  .feedSection {
+    flex: 0.6;
+  }
+  

@@ -1,0 +1,67 @@
+.post {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .postHeader {
+    display: flex;
+    align-items: center;
+  }
+  
+  .postAvatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  .postUsername {
+    font-weight: bold;
+  }
+  
+  .postImage {
+    width: 100%;
+    margin-top: 10px;
+  }
+  
+  .postActions {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+  }
+  
+  .postCaption {
+    margin-top: 10px;
+  }
+  
+
+  /* Post.module.css */
+
+.postContainer {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 10px 0;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.username {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+.image {
+  width: 100%;
+  height: 100%; /* Set fixed height */
+  object-fit: cover; /* Ensures the image covers the area without stretching */
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+
+.caption {
+  font-size: 1rem;
+  color: #555;
+}

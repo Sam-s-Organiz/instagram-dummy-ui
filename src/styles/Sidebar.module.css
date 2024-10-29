@@ -1,0 +1,39 @@
+.drawerStyling {
+  background-color: #f9f9f9;
+  border-right: 1px solid #c8c8c8;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--px-64);
+}
+
+.iconStyling {
+  font-size: var(--px-24);
+}
+
+.listItem {
+  margin: var(--px-8) var(--px-12);
+  padding: 4px 0;
+  align-content: center;
+  border-radius: var(--px-100);
+  height: clamp(3.0625rem, 3.0625vw, 3.0625rem);
+  text-decoration: none;
+}
+
+.listItem:hover {
+  background: #f3187b;
+  color: #ffffff;
+}
+
+.minimizeButton {
+  margin: var(--px-16) auto;
+  display: flex;
+  align-items: center;
+  padding: var(--px-8) var(--px-16);
+  border-radius: var(--px-100);
+}
+
+.minimizeButton:hover {
+  background: #f1b0e9;
+  color: #ffffff;
+}

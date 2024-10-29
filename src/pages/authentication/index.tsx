@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import styles from "./dashboard.module.css";
+import { useRouter } from "next/router"; // Import the useRouter hook
+import styles from "./authentication.module.css";
 
-const Dashboard = () => {
+const Authentication = () => {
   const [isSignUp, setIsSignUp] = useState(false); // State to manage form type
   const [error, setError] = useState<string | null>(null); // Error state
+  const router = useRouter();
 
   const handleSignUpClick = () => {
     setIsSignUp(true);
@@ -21,13 +23,14 @@ const Dashboard = () => {
       password: data.get("password"),
     };
 
-    // Add username and bio only for sign-up
     if (isSignUp) {
       requestData.username = data.get("username");
-      requestData.bio = data.get("bio") || null; // Bio is optional
+      requestData.bio = data.get("bio") || null;
     }
 
-    const endpoint = isSignUp ? "http://localhost:8081/api/user/register" : "http://localhost:8081/api/user/login";  
+    const endpoint = isSignUp
+      ? "http://localhost:8081/api/user/register"
+      : "http://localhost:8081/api/user/login";
 
     try {
       const response = await fetch(endpoint, {
@@ -37,24 +40,30 @@ const Dashboard = () => {
         },
         body: JSON.stringify(requestData),
       });
-      
-      console.log("Response", response);
+
       if (!response.ok) {
         const message = `Error: ${response.statusText}`;
         throw new Error(message);
       }
 
       const result = await response.json();
-      console.log("Success:", result);
 
-      // Handle success (e.g., redirect, store token, etc.)
-      if (isSignUp) {
-        alert("Account created successfully!");
-      } else {
-        alert("Signed in successfully!");
-        // Optionally store user token or details in local storage
+      // Store user data and JWT in localStorage
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          id: result.id,
+          username: result.username,
+          email: result.email,
+          token: result.jtwToken,
+          profilePicture: result.profilePicture,
+          bio: result.bio,
+        })
+      );
+
+      if (response.status === 200 || response.status === 201) {
+        router.push("/home");
       }
-
     } catch (error) {
       setError("Failed to submit form. Please try again.");
       console.error("Error:", error);
@@ -63,10 +72,14 @@ const Dashboard = () => {
 
   return (
     <div className={styles.container}>
-      {error && <p className={styles.error}>{error}</p>} {/* Display error message */}
-
+      {error && <p className={styles.error}>{error}</p>}{" "}
+      {/* Display error message */}
       {/* Sign Up Form */}
-      <div className={`${styles.formContainer} ${isSignUp ? styles.rightPanelActive : ""}`}>
+      <div
+        className={`${styles.formContainer} ${
+          isSignUp ? styles.rightPanelActive : ""
+        }`}
+      >
         <form className={styles.form} onSubmit={handleSubmit}>
           <h1 className={styles.title}>Create Account</h1>
           {isSignUp && (
@@ -113,9 +126,12 @@ const Dashboard = () => {
           )}
         </form>
       </div>
-
       {/* Sign In Section */}
-      <div className={`${styles.overlayContainer} ${isSignUp ? styles.rightPanelActive : ""}`}>
+      <div
+        className={`${styles.overlayContainer} ${
+          isSignUp ? styles.rightPanelActive : ""
+        }`}
+      >
         <div className={styles.overlay}>
           <h1 className={styles.title}>Welcome Back!</h1>
           <p className={styles.description}>
@@ -156,4 +172,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Authentication;
