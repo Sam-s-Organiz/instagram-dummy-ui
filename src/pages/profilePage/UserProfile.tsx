@@ -6,9 +6,14 @@ import DynamicModal from "@/components/CommonModal";
 import UserProfileImage from "./UserProfileImage";
 import UserProfileStats from "./UserProfileStats";
 import FileUploadModal from "./FileUploadModal";
+import User from "@/components/Util";
 
-const UserProfile = () => {
-  const [userDetails, setUserDetails] = useState<any>(null);
+interface UserProfileProps {
+  userData: { [key: string]: User };
+}
+
+const UserProfile = ({userData}:UserProfileProps) => {
+  const [userDetails, setUserDetails] = useState<any>(userData);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -16,8 +21,9 @@ const UserProfile = () => {
     if (storedUser) {
       try {
         setUserDetails(JSON.parse(storedUser));
+        console.log("userID")
       } catch (error) {
-        console.error("Failed to parse user data:", error);
+        console.error("Faileds to parse user data:", error);
       }
     }
   }, []);
@@ -47,7 +53,7 @@ const UserProfile = () => {
       >
         <FileUploadModal
           onClose={() => setIsModalOpen(false)}
-          userId={userDetails?.userId}
+          userId={userDetails?.id}
           token={userDetails?.token}
         />
       </DynamicModal>

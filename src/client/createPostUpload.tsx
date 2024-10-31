@@ -1,25 +1,34 @@
- 
 import { HttpMethod } from "@/types/HttpStatusCode";
 
 export const uploadPostAttachment = (
   userId: number,
-   file: File,
+  file?: File,
+  imageUrl?: string,
+  caption?: string,
   token?: string
 ) => {
-  const apiUrl = new URL("http://localhost:8081/api/posts/upload");
-  apiUrl.searchParams.append("userId", String(userId));
-//   apiUrl.searchParams.append("imageUrl", imageUrl);
-  console.log("api url ",apiUrl)
+  const apiUrl = `http://localhost:8081/api/posts/upload/${userId}`;
 
   const formData = new FormData();
-  formData.append("file", file);
-  console.log('formData',formData)
+  if (file) {
+    formData.append("file", file, file.name);
+  }
+  if (caption) {
+    formData.append("caption", caption);
+  }
 
-  return fetch(apiUrl.toString(), {
+  // Build URL with query parameters if an image URL is provided
+  const urlWithParams = imageUrl
+    ? `${apiUrl}?imageUrl=${encodeURIComponent(
+        imageUrl
+      )}&caption=${encodeURIComponent(caption || "")}`
+    : apiUrl;
+
+  return fetch(urlWithParams, {
     method: HttpMethod.Post,
     headers: {
       Authorization: `Bearer ${token}`,
     },
-    body: formData,
+    body: file ? formData : undefined,
   });
 };

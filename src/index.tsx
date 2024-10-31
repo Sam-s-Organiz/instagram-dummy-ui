@@ -3,8 +3,7 @@ import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import './app/globals.css';
-
+import "./app/globals.css";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -12,7 +11,6 @@ const Home: NextPage = () => {
 
   const [loading, setLoading] = useState(false);
 
-  // set default page to claims for all roles
   useEffect(() => {
     router.push("/home");
   });
@@ -34,7 +32,7 @@ const Home: NextPage = () => {
     };
   });
 
-  return loading ? <LoadingTruck /> : <div>Hello, again, commerce!</div>;
+  return loading ? <LoadingTruck /> : <div>Hello, again, Insta Users!</div>;
 };
 
 export default Home;

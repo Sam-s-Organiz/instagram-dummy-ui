@@ -1,5 +1,5 @@
-import React, { useState, ChangeEvent, useEffect } from "react";
-import { Box, Button, Typography } from "@mui/material";
+import React, { useState, ChangeEvent } from "react";
+import { Box, Button, Typography, Tab, Tabs } from "@mui/material";
 import UploadIcon from "@mui/icons-material/Upload";
 import styles from "./ProfilePage.module.css";
 import { uploadPostAttachment } from "@/client/createPostUpload";
@@ -13,12 +13,19 @@ interface FileUploadModalProps {
 const FileUploadModal = ({ userId, onClose, token }: FileUploadModalProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string>("");
+  const [caption, setCaption] = useState<string>(""); // New state for caption
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [tabIndex, setTabIndex] = useState<number>(0); // Track selected tab
+
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) setSelectedFile(file);
-    console.log("uploaded file", file);
+    if (file) {
+      setSelectedFile(file);
+      console.log("Uploaded file:", file);
+      console.log("token",token);
+      console.log("userId",userId)
+    }
   };
 
   const handleFileUpload = async () => {
@@ -27,13 +34,15 @@ const FileUploadModal = ({ userId, onClose, token }: FileUploadModalProps) => {
       return;
     }
 
-    console.log("Selected file:", selectedFile);
-    console.log("Image URL:", selectedFile.name.toString());
+    if (!caption) { // Check if caption is provided
+      setUploadError("Caption is required for file uploads.");
+      return;
+    }
 
     setUploadError(null);
 
     try {
-      const response = await uploadPostAttachment(userId, selectedFile, token);
+      const response = await uploadPostAttachment(userId, selectedFile, undefined, caption, token); // Call with file and caption
 
       if (!response.ok) {
         throw new Error("File upload failed");
@@ -47,36 +56,116 @@ const FileUploadModal = ({ userId, onClose, token }: FileUploadModalProps) => {
     }
   };
 
+  const handleUrlUpload = async () => {
+    if (!imageUrl) {
+      setUploadError("Please enter an image URL.");
+      return;
+    }
+
+    if (!caption) { // Check if caption is provided
+      setUploadError("Caption is required for URL uploads.");
+      return;
+    }
+
+    setUploadError(null);
+    
+    try {
+      const response = await uploadPostAttachment(userId, undefined, imageUrl, caption, token); // Call with image URL and caption
+
+      if (!response.ok) {
+        throw new Error("URL upload failed");
+      }
+
+      console.log("Image URL uploaded successfully");
+      onClose();
+    } catch (error) {
+      setUploadError("Error uploading image URL");
+      console.error("Upload error:", error);
+    }
+  };
+
   return (
     <Box className={styles.uploadArea}>
       <UploadIcon className={styles.uploadIcon} />
       <Typography className={styles.uploadText}>
         Drag photos and videos here
       </Typography>
-      <Button
-        variant="contained"
-        component="label"
-        className={styles.uploadButton}
-      >
-        Select From Computer
-        <input
-          type="file"
-          accept="image/*,video/*"
-          onChange={handleFileChange}
-          hidden
-        />
-      </Button>
-      {uploadError && (
-        <Typography className={styles.fileErrorMsg}>{uploadError}</Typography>
+
+      <Tabs value={tabIndex} onChange={(e, newValue) => setTabIndex(newValue)}>
+        <Tab label="Upload from Computer" />
+        <Tab label="Upload from URL" />
+      </Tabs>
+
+      {tabIndex === 0 && (  
+        <Box>
+          <Button
+            variant="contained"
+            component="label"
+            className={styles.uploadButton}
+          >
+            Select From Computer
+            <input
+              type="file"
+              accept="image/*,video/*"
+              onChange={handleFileChange}
+              hidden
+            />
+          </Button>
+          {uploadError && (
+            <Typography className={styles.fileErrorMsg}>{uploadError}</Typography>
+          )}
+          {selectedFile && (
+            <>
+              {/* Additional input for caption in the file upload section */}
+              <Typography className={styles.uploadText}>Caption:</Typography>
+              <input
+                type="text"
+                value={caption}
+                onChange={(e) => setCaption(e.target.value)}
+                placeholder="Enter a caption"
+                className={styles.urlInput}
+              />
+              <Button
+                variant="contained"
+                onClick={handleFileUpload}
+                className={styles.uploadButton}
+              >
+                Upload {selectedFile.name}
+              </Button>
+            </>
+          )}
+        </Box>
       )}
-      {selectedFile && (
-        <Button
-          variant="contained"
-          onClick={handleFileUpload}
-          className={styles.uploadButton}
-        >
-          Upload {selectedFile.name}
-        </Button>
+
+      {tabIndex === 1 && ( // Upload from URL Tab
+        <Box>
+          <Typography className={styles.uploadText}>Enter Image URL:</Typography>
+          <input
+            type="text"
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
+            placeholder="https://example.com/image.jpg"
+            className={styles.urlInput}
+          />
+          <Typography className={styles.uploadText}>Caption:</Typography>
+          <input
+            type="text"
+            value={caption}
+            onChange={(e) => setCaption(e.target.value)}
+            placeholder="Enter a caption"
+            className={styles.urlInput}
+          />
+          {uploadError && (
+            <Typography className={styles.fileErrorMsg}>{uploadError}</Typography>
+          )}
+          <Button
+            variant="contained"
+            onClick={handleUrlUpload}
+            className={styles.uploadButton}
+          >
+            Upload Image
+          </Button>
+        </Box>
       )}
     </Box>
   );
