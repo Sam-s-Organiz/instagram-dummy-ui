@@ -142,3 +142,90 @@
   color: #fff;  
   margin-bottom: 10px;  
 }
+
+.postItem {
+  margin: 10px 0;
+}
+
+.postImage {
+  width: 100%; /* Adjust as needed */
+  border-radius: 8px;
+}
+
+.postCaption {
+  margin-top: 5px;
+  font-size: 14px; /* Adjust font size as needed */
+}
+
+.profileTabsContainer {
+  padding: 20px;
+}
+
+.tabsHeader {
+  display: flex;
+  border-bottom: 1px solid #ccc;
+}
+
+.tab {
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.activeTab {
+  font-weight: bold;
+  border-bottom: 2px solid blue; /* Highlight active tab */
+}
+
+.tabContent {
+  margin-top: 20px;
+}
+
+.postsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px; /* Space between post boxes */
+}
+
+.postBox {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 200px; /* Set fixed width for post boxes */
+  text-align: center;
+}
+
+.postImage {
+  width: 100%; /* Make images responsive */
+  height: auto;
+}
+
+.caption {
+  padding: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+.profileTabsContainer {
+  padding: 20px;
+}
+
+.tabsHeader {
+  display: flex;
+  border-bottom: 1px solid #ccc;
+}
+
+.tab {
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.activeTab {
+  font-weight: bold;
+  border-bottom: 2px solid blue; /* Highlight active tab */
+}
+
+.tabContent {
+  margin-top: 20px;
+}
+
+

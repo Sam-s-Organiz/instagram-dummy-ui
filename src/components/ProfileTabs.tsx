@@ -1,12 +1,26 @@
 import React, { useState } from 'react';
-import Box from '@mui/material/Box'; // Assuming you're using Material UI's Box component
-import styles from '@/styles/ProfileTabs.module.css';
+import Box from '@mui/material/Box';
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
+ import styles from '@/styles/ProfileTabs.module.css';
+import { getImageSrc } from './Util';
 
-const ProfileTabs = () => {
+const ProfileTabs = ({ uploadedPosts }:any) => {
   const [activeTab, setActiveTab] = useState('posts');
 
-  const handleTabClick = (tab: string) => {
+  const handleTabClick = (tab: React.SetStateAction<string>) => {
     setActiveTab(tab);
+  };
+
+  const formatPostsForImageList = () => {
+    return uploadedPosts.map((post: any) => {
+      return {
+        img: getImageSrc(post),  
+        title: post.caption,
+        cols: 1,
+        rows: 1,
+      };
+    });
   };
 
   return (
@@ -39,7 +53,20 @@ const ProfileTabs = () => {
       </Box>
 
       <Box className={styles.tabContent}>
-        {activeTab === 'posts' && <Box>Posts Content</Box>}
+        {activeTab === 'posts' && (
+          <ImageList sx={{ width: '100%', height: 'auto' }} variant="quilted" cols={4} rowHeight={121}>
+            {formatPostsForImageList().map((item: { cols: any; rows: any; img: string | undefined; title: string | undefined; }, index: React.Key | null | undefined) => (
+              <ImageListItem key={index} cols={item.cols || 1} rows={item.rows || 1}>
+                <img
+                  src={item.img}
+                  alt={item.title}
+                  loading="lazy"
+                  style={{ objectFit: 'cover' }} // Ensure images cover their boxes
+                />
+              </ImageListItem>
+            ))}
+          </ImageList>
+        )}
         {activeTab === 'reels' && <Box>Reels Content</Box>}
         {activeTab === 'saved' && <Box>Saved Content</Box>}
         {activeTab === 'tagged' && <Box>Tagged Content</Box>}

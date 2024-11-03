@@ -12,7 +12,7 @@ interface UserProfileProps {
   userData: { [key: string]: User };
 }
 
-const UserProfile = ({userData}:UserProfileProps) => {
+const UserProfile = ({ userData }: UserProfileProps) => {
   const [userDetails, setUserDetails] = useState<any>(userData);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -21,7 +21,6 @@ const UserProfile = ({userData}:UserProfileProps) => {
     if (storedUser) {
       try {
         setUserDetails(JSON.parse(storedUser));
-        console.log("userID")
       } catch (error) {
         console.error("Faileds to parse user data:", error);
       }
