@@ -15,13 +15,11 @@ const UploadPostModal = () => {
   const [uploadError, setUploadError] = useState<string | null>(null);
 
   const createPostAttachment = async (file: File) => {
-    console.log("Uploading file:", file.name);
     return new Promise((resolve) => setTimeout(resolve, 2000));
   };
 
   const handleFileUpload = async (event: ChangeEvent<HTMLInputElement>) => {
-    console.log("upload icon clicked");
-    const file = event.target.files?.item(0);
+     const file = event.target.files?.item(0);
     if (!file) return;
 
     setUploadingFile(file);

@@ -1,23 +1,27 @@
-import { useCallback, useState } from "react";
+import { useState, useCallback } from "react";
 import HomeIcon from "@mui/icons-material/Home";
+import SearchIcon from "@mui/icons-material/Search";
 import ExploreIcon from "@mui/icons-material/Explore";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import MessageIcon from "@mui/icons-material/Message";
+import AddBoxIcon from "@mui/icons-material/AddBox";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import styles from "../styles/Sidebar.module.css";
-import Link from "next/link";
 import {
   Box,
-  CSSObject,
   Drawer,
   List,
   ListItemButton,
-  styled,
-  Theme,
   Tooltip,
+  CSSObject,
+  Theme,
+  styled,
 } from "@mui/material";
-import MenuCell from "./MenuCell";
- 
+import Link from "next/link";
+
 const drawerWidth = 200;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -59,115 +63,86 @@ const OpenDrawer = styled(Drawer, {
 }));
 
 const menuItems = [
-  {
-    title: "Home",
-    icon: <HomeIcon />,
-    path: "/home",
-    disabled: false,
-    hidden: false,
-  },
-  {
-    title: "Explore",
-    icon: <ExploreIcon />,
-    path: "/explore",
-    disabled: false,
-    hidden: false,
-  },
-  {
-    title: "Profile",
-    icon: <AccountCircleIcon />,
-    path: "/profilePage",
-    disabled: false,
-    hidden: false,
-  },
+  { title: "Home", icon: <HomeIcon />, path: "/home" },
+  { title: "Search", icon: <SearchIcon />, path: "/search" },
+  { title: "Explore", icon: <ExploreIcon />, path: "/explore" },
+  { title: "Reels", icon: <FavoriteIcon />, path: "/reels" },
+  { title: "Messages", icon: <MessageIcon />, path: "/messages", badge: 2 },
+  { title: "Notifications", icon: <FavoriteIcon />, path: "/notifications" },
+  { title: "Create", icon: <AddBoxIcon />, path: "/create" },
+  { title: "Profile", icon: <AccountCircleIcon />, path: "profilePage" },
+  { title: "Threads", icon: <FavoriteIcon />, path: "/threads" },
+  { title: "More", icon: <MoreHorizIcon />, path: "/more" },
 ];
 
 const LeftPanel = () => {
-  const [isOpen, setIsOpen] = useState(false);
-   const [selectedTab, setSelectedTab] = useState<string | null>(null);
-  // const [menuList, setMenuList] = useState(DEFAULT_MENU_LIST);
+  const [isOpen, setIsOpen] = useState(true);
+  const [selectedTab, setSelectedTab] = useState<string | null>(null);
+
   const toggleDrawer = useCallback(() => {
     setIsOpen(!isOpen);
   }, [isOpen]);
 
+  const handleClick = (title: string) => {
+    setSelectedTab(title);
+  };
+
   return (
     <OpenDrawer open={isOpen} variant="permanent">
       <Box className={styles.drawerStyling}>
-        <Box flexGrow={1}>
+        <Box>
+          <h6 className={styles.drawerHeader}>Instagram</h6>
+        </Box>
+
+        <Box className={styles.navList}>
           <nav>
             <List>
-              {menuItems.map((menu) => {
-                if (!menu.hidden) {
-                  return (
-                    <ListItemButton
-                      sx={{
-                        width: isOpen ? "90%" : "70%",
-                        justifyContent: isOpen ? "flex-start" : "center",
-                        background:
-                          selectedTab === menu.title ? "#E0F1EE" : "none",
-                        color: selectedTab === menu.title ? "#027256" : "none",
-                      }}
-                      className={styles.listItem}
-                      key={menu.title}
-                      disabled={menu.disabled}
-                    >
-                      <Link
-                        href={menu.path}
-                        passHref
-                        style={{ textDecoration: "none" }}
-                        onClick={() => setSelectedTab(menu.title)}
-                      >
-                        <Tooltip
-                          title={!isOpen && menu.title}
-                          placement="right"
-                          disableInteractive
-                          PopperProps={{
-                            modifiers: [
-                              {
-                                name: "offset",
-                                options: {
-                                  offset: [0, -20],
-                                },
-                              },
-                            ],
-                          }}
-                        >
-                          <ListItemButton>
-                            <MenuCell
-                              icon={menu.icon}
-                              titleText={menu.title}
-                              isOpen={isOpen}
-                            />
-                          </ListItemButton>
-                        </Tooltip>
-                      </Link>
-                    </ListItemButton>
-                  );
-                }
-              })}
+              {menuItems.map((menu) => (
+                <ListItemButton
+                  key={menu.title}
+                  className={
+                    selectedTab === menu.title
+                      ? `${styles.listItemButton} ${styles.selectedTab}`
+                      : isOpen
+                      ? styles.listItemButton
+                      : styles.listItemButtonClosed
+                  }
+                  onClick={() => handleClick(menu.title)}
+                >
+                  <Link
+                    href={menu.path}
+                    passHref
+                    style={{ textDecoration: "none" }}
+                  >
+                    <Tooltip title={!isOpen && menu.title} placement="right">
+                      <div className={styles.listItemText}>
+                        <span>{menu.icon}</span>
+                        {isOpen && (
+                          <span className={styles.title}>{menu.title}</span>
+                        )}
+                      </div>
+                    </Tooltip>
+                  </Link>
+                </ListItemButton>
+              ))}
             </List>
           </nav>
         </Box>
+
         <Box
-          sx={{
-            justifyContent: isOpen ? "flex-start" : "center",
-            width: isOpen ? "90%" : "60%",
-          }}
-          className={styles.minimizeButton}
+          className={
+            isOpen
+              ? `${styles.toggleButton}`
+              : `${styles.toggleButton} ${styles.toggleButtonClosed}`
+          }
         >
-          <MenuCell
-            icon={
-              isOpen ? (
-                <ChevronLeftIcon className={styles.iconStyling} />
-              ) : (
-                <ChevronRightIcon className={styles.iconStyling} />
-              )
-            }
-            titleText="Minimize"
-            isOpen={isOpen}
-            handleClick={toggleDrawer}
-            onIconClick={toggleDrawer}
-          />
+          <ListItemButton onClick={toggleDrawer}>
+            {isOpen ? (
+              <ChevronLeftIcon className={styles.iconSize} />
+            ) : (
+              <ChevronRightIcon className={styles.iconSize} />
+            )}
+          </ListItemButton>
         </Box>
       </Box>
     </OpenDrawer>

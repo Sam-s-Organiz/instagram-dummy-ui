@@ -1,4 +1,4 @@
-import React, { useEffect, useState, ChangeEvent } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button } from "@mui/material";
 import styles from "./ProfilePage.module.css";
 import LoadingTruck from "@/components/LoadingTruck";
@@ -9,11 +9,11 @@ import FileUploadModal from "./FileUploadModal";
 import User from "@/components/Util";
 
 interface UserProfileProps {
-  userData: { [key: string]: User };
+  userData: any;
 }
 
 const UserProfile = ({ userData }: UserProfileProps) => {
-  const [userDetails, setUserDetails] = useState<any>(userData);
+  const [userDetails, setUserDetails] = useState<User>(userData);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -22,7 +22,7 @@ const UserProfile = ({ userData }: UserProfileProps) => {
       try {
         setUserDetails(JSON.parse(storedUser));
       } catch (error) {
-        console.error("Faileds to parse user data:", error);
+        console.error("Failed to parse user data:", error);
       }
     }
   }, []);

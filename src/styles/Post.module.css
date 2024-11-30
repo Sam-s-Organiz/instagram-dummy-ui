@@ -65,3 +65,37 @@
   font-size: 1rem;
   color: #555;
 }
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.followButton, .unfollowButton, .likeButton, .likedButton {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.followButton {
+  background-color: #007bff;
+  color: white;
+}
+
+.unfollowButton {
+  background-color: #dc3545;
+  color: white;
+}
+
+.likeButton {
+  background-color: #28a745;
+  color: white;
+}
+
+.likedButton {
+  background-color: #ffc107;
+  color: white;
+}
+

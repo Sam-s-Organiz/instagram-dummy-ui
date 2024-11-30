@@ -17,14 +17,10 @@ const FileUploadModal = ({ userId, onClose, token }: FileUploadModalProps) => {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [tabIndex, setTabIndex] = useState<number>(0); // Track selected tab
 
-
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       setSelectedFile(file);
-      console.log("Uploaded file:", file);
-      console.log("token",token);
-      console.log("userId",userId)
     }
   };
 
@@ -34,15 +30,17 @@ const FileUploadModal = ({ userId, onClose, token }: FileUploadModalProps) => {
       return;
     }
 
-    if (!caption) { // Check if caption is provided
-      setUploadError("Caption is required for file uploads.");
-      return;
-    }
 
     setUploadError(null);
 
     try {
-      const response = await uploadPostAttachment(userId, selectedFile, undefined, caption, token); // Call with file and caption
+      const response = await uploadPostAttachment(
+        userId,
+        selectedFile,
+        undefined,
+        caption,
+        token
+      ); // Call with file and caption
 
       if (!response.ok) {
         throw new Error("File upload failed");
@@ -62,15 +60,22 @@ const FileUploadModal = ({ userId, onClose, token }: FileUploadModalProps) => {
       return;
     }
 
-    if (!caption) { // Check if caption is provided
+    if (!caption) {
+      // Check if caption is provided
       setUploadError("Caption is required for URL uploads.");
       return;
     }
 
     setUploadError(null);
-    
+
     try {
-      const response = await uploadPostAttachment(userId, undefined, imageUrl, caption, token); // Call with image URL and caption
+      const response = await uploadPostAttachment(
+        userId,
+        undefined,
+        imageUrl,
+        caption,
+        token
+      ); // Call with image URL and caption
 
       if (!response.ok) {
         throw new Error("URL upload failed");
@@ -96,7 +101,7 @@ const FileUploadModal = ({ userId, onClose, token }: FileUploadModalProps) => {
         <Tab label="Upload from URL" />
       </Tabs>
 
-      {tabIndex === 0 && (  
+      {tabIndex === 0 && (
         <Box>
           <Button
             variant="contained"
@@ -112,7 +117,9 @@ const FileUploadModal = ({ userId, onClose, token }: FileUploadModalProps) => {
             />
           </Button>
           {uploadError && (
-            <Typography className={styles.fileErrorMsg}>{uploadError}</Typography>
+            <Typography className={styles.fileErrorMsg}>
+              {uploadError}
+            </Typography>
           )}
           {selectedFile && (
             <>
@@ -139,7 +146,9 @@ const FileUploadModal = ({ userId, onClose, token }: FileUploadModalProps) => {
 
       {tabIndex === 1 && ( // Upload from URL Tab
         <Box>
-          <Typography className={styles.uploadText}>Enter Image URL:</Typography>
+          <Typography className={styles.uploadText}>
+            Enter Image URL:
+          </Typography>
           <input
             type="text"
             value={imageUrl}
@@ -156,7 +165,9 @@ const FileUploadModal = ({ userId, onClose, token }: FileUploadModalProps) => {
             className={styles.urlInput}
           />
           {uploadError && (
-            <Typography className={styles.fileErrorMsg}>{uploadError}</Typography>
+            <Typography className={styles.fileErrorMsg}>
+              {uploadError}
+            </Typography>
           )}
           <Button
             variant="contained"

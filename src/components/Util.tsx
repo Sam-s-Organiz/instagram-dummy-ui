@@ -5,9 +5,11 @@ export default interface User {
   token: string;
   profilePicture: string;
   bio: string;
+  postCount: number;
+  followersCount: number;
+  followingCount: number;
 }
 
-// utils/imageUtils.ts
 export const getMimeType = (url: string): string => {
   const extension = url.split(".").pop()?.toLowerCase();
   switch (extension) {
@@ -19,7 +21,7 @@ export const getMimeType = (url: string): string => {
     case "gif":
       return "image/gif";
     default:
-      return "image/jpeg"; // Default MIME type
+      return "image/jpeg";
   }
 };
 
@@ -30,14 +32,12 @@ export const getImageSrc = (post: {
 }): string | null => {
   const cleanImageUrl = post.imageUrl?.replace(/"/g, "").trim();
 
-  // Determine image source: either `imageUrl` or Base64 `fileData`
   let imageSrc = cleanImageUrl;
-  let mimeType = cleanImageUrl ? getMimeType(cleanImageUrl) : "image/jpeg"; // Default MIME type
+  let mimeType = cleanImageUrl ? getMimeType(cleanImageUrl) : "image/jpeg";
 
-  // If `fileData` is available, format it as a data URL
   if (post.fileData) {
     imageSrc = `data:${mimeType};base64,${post.fileData}`;
   }
 
-  return imageSrc || null; // Return null if no image is available
+  return imageSrc || null;
 };

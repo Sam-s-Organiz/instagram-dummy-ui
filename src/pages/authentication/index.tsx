@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { useRouter } from "next/router"; // Import the useRouter hook
+import { useRouter } from "next/router";
 import styles from "./authentication.module.css";
 
 const Authentication = () => {
-  const [isSignUp, setIsSignUp] = useState(false); // State to manage form type
-  const [error, setError] = useState<string | null>(null); // Error state
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   const handleSignUpClick = () => {
@@ -48,7 +48,6 @@ const Authentication = () => {
 
       const result = await response.json();
 
-      // Store user data and JWT in localStorage
       localStorage.setItem(
         "user",
         JSON.stringify({
@@ -60,6 +59,7 @@ const Authentication = () => {
           bio: result.bio,
         })
       );
+      localStorage.setItem("jwtToken", result.jtwToken);
 
       if (response.status === 200 || response.status === 201) {
         router.push("/home");
@@ -72,9 +72,8 @@ const Authentication = () => {
 
   return (
     <div className={styles.container}>
-      {error && <p className={styles.error}>{error}</p>}{" "}
-      {/* Display error message */}
-      {/* Sign Up Form */}
+      {error && <p className={styles.error}>{error}</p>}
+
       <div
         className={`${styles.formContainer} ${
           isSignUp ? styles.rightPanelActive : ""

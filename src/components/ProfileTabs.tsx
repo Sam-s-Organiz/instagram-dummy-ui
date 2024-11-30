@@ -61,7 +61,7 @@ const ProfileTabs = ({ uploadedPosts }:any) => {
                   src={item.img}
                   alt={item.title}
                   loading="lazy"
-                  style={{ objectFit: 'cover' }} // Ensure images cover their boxes
+                  style={{ objectFit: 'cover' }}  
                 />
               </ImageListItem>
             ))}

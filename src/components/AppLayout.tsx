@@ -1,13 +1,13 @@
 import React from "react";
-import Header from "./Header"; // Assuming you have a Header component
+import Header from "./Header";  
  import styles from "../styles/LayoutPage.module.css";
 import LeftPanel from "./Leftpanel";
 
 interface LayoutProps {
-  children: React.ReactNode; // This will represent the content for each page
+  children: React.ReactNode;  
 }
 
-const LayoutPage: React.FC<LayoutProps> = ({ children }) => {
+const LayoutPage= ({ children }:LayoutProps) => {
   return (
     <div className={styles.layoutContainer}>
       <Header />

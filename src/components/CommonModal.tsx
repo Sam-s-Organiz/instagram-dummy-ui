@@ -21,9 +21,7 @@ const DynamicModal = ({
         <Typography variant="h6" className={styles.modalTitle}>
           {title}
         </Typography>
-        <Box className={styles.modalBody}>
-          {children} {/* Render the dynamic content here */}
-        </Box>
+        <Box className={styles.modalBody}>{children}</Box>
         <Button onClick={onClose} className={styles.closeButton}>
           Close
         </Button>
