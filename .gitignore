@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
@@ -43,6 +42,4 @@ yarn-error.log*
 /playwright-report/
 /playwright/.cache/
 /playwright/.auth/
-=======
 node_modules
->>>>>>> ef794b59d17c602ae629c703db16dcc06f14a369
