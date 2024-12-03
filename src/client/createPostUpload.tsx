@@ -17,7 +17,7 @@ export const uploadPostAttachment = (
     formData.append("caption", caption);
   }
 
-  // Build URL with query parameters if an image URL is provided
+  
   const urlWithParams = imageUrl
     ? `${apiUrl}?imageUrl=${encodeURIComponent(
         imageUrl

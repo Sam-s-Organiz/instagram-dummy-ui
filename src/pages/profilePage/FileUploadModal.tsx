@@ -13,9 +13,9 @@ interface FileUploadModalProps {
 const FileUploadModal = ({ userId, onClose, token }: FileUploadModalProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string>("");
-  const [caption, setCaption] = useState<string>(""); // New state for caption
+  const [caption, setCaption] = useState<string>("");
   const [uploadError, setUploadError] = useState<string | null>(null);
-  const [tabIndex, setTabIndex] = useState<number>(0); // Track selected tab
+  const [tabIndex, setTabIndex] = useState<number>(0);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -29,7 +29,6 @@ const FileUploadModal = ({ userId, onClose, token }: FileUploadModalProps) => {
       setUploadError("Please select a file to upload.");
       return;
     }
-
 
     setUploadError(null);
 
@@ -61,7 +60,6 @@ const FileUploadModal = ({ userId, onClose, token }: FileUploadModalProps) => {
     }
 
     if (!caption) {
-      // Check if caption is provided
       setUploadError("Caption is required for URL uploads.");
       return;
     }
@@ -75,7 +73,7 @@ const FileUploadModal = ({ userId, onClose, token }: FileUploadModalProps) => {
         imageUrl,
         caption,
         token
-      ); // Call with image URL and caption
+      );
 
       if (!response.ok) {
         throw new Error("URL upload failed");
@@ -123,7 +121,6 @@ const FileUploadModal = ({ userId, onClose, token }: FileUploadModalProps) => {
           )}
           {selectedFile && (
             <>
-              {/* Additional input for caption in the file upload section */}
               <Typography className={styles.uploadText}>Caption:</Typography>
               <input
                 type="text"
@@ -144,7 +141,7 @@ const FileUploadModal = ({ userId, onClose, token }: FileUploadModalProps) => {
         </Box>
       )}
 
-      {tabIndex === 1 && ( // Upload from URL Tab
+      {tabIndex === 1 && (
         <Box>
           <Typography className={styles.uploadText}>
             Enter Image URL:
@@ -153,7 +150,6 @@ const FileUploadModal = ({ userId, onClose, token }: FileUploadModalProps) => {
             type="text"
             value={imageUrl}
             onChange={(e) => setImageUrl(e.target.value)}
-            placeholder="https://example.com/image.jpg"
             className={styles.urlInput}
           />
           <Typography className={styles.uploadText}>Caption:</Typography>

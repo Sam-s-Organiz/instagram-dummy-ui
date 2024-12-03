@@ -32,18 +32,22 @@ const Post = ({ post }: PostProps) => {
   };
 
   const handleLike = async () => {
-    if (isLiked) return; // Prevent duplicate likes
-    setIsLiked(true); // Optimistically update
+    if (isLiked) return;
+    setIsLiked(true);
     setLikeCount((prev) => prev + 1);
 
     try {
+      if (!storedToken) {
+        throw new Error("User is not authenticated.");
+      }
+
       const response = await likeParticularPost(post.id, storedToken);
 
       if (response.status !== 200) {
-        throw new Error("API failed");
+        throw new Error(`API failed with status: ${response.status}`);
       }
-    } catch (error) {
-      console.error("Error liking post:", error);
+    } catch (error: any) {
+      console.error("Error liking post:", error.message || error);
       setIsLiked(false);
       setLikeCount((prev) => prev - 1);
     }
