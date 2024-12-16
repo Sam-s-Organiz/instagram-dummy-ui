@@ -1,6 +1,6 @@
 .drawerStyling {
-  background-color: #000;  
-  color: #fff;  
+  background-color: #000;
+  color: #fff;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -10,7 +10,7 @@
   font-size: 30px;
 }
 
-.listItem {
+.listItemButton {
   margin: var(--px-8) var(--px-12);
   padding: 4px 0;
   align-content: center;
@@ -21,13 +21,24 @@
   align-items: center;
   gap: 16px;
   color: #aaa;
-  transition: background-color 0.3s ease-in-out; 
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
-.listItem:hover,
-.listItem.active {
-  background: #333;  
-  color: #fff;  
+.listItemButton:hover,
+.listItemButton.active {
+  background: #333;
+  color: #fff;
+}
+
+.listItemText {
+  display: flex;
+  align-items: center;
+  color: inherit;
+}
+
+.title {
+  margin-left: 8px;
+  color: inherit;
 }
 
 .minimizeButton {
@@ -37,7 +48,7 @@
   margin-bottom: 1rem;
   padding: 0.5rem;
   border-radius: var(--px-100);
-  transition: background-color 0.3s ease-in-out; 
+  transition: background-color 0.3s ease-in-out;
 }
 
 .badge {

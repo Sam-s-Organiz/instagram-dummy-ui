@@ -103,9 +103,7 @@ const LeftPanel = () => {
                   className={
                     selectedTab === menu.title
                       ? `${styles.listItemButton} ${styles.selectedTab}`
-                      : isOpen
-                      ? styles.listItemButton
-                      : styles.listItemButtonClosed
+                      : `${styles.listItemButton}`
                   }
                   onClick={() => handleClick(menu.title)}
                 >
