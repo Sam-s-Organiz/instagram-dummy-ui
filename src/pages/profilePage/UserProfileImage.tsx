@@ -5,18 +5,18 @@ import styles from "./ProfilePage.module.css";
 import { updateProfilePicture } from "@/client/ProfilePicUpload";
 import FileUploadModal from "@/components/FileUploadModal";
 import DynamicModal from "@/components/CommonModal";
+import User from "@/components/Util";
 
 interface UserProfileImageProps {
-  userDetails: any;
+  userDetails: User;
 }
 
 const UserProfileImage = ({ userDetails }: UserProfileImageProps) => {
-  const [profilePicture, setProfilePicture] = useState<string | null>(null);
+  const [profilePicture, setProfilePicture] = useState<string | null>(userDetails.profilePicture);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
 
   useEffect(() => {
-    // Retrieve profilePicture from localStorage or user details
-    const storedProfilePicture = localStorage.getItem("profilePicture");
+     const storedProfilePicture = localStorage.getItem("profilePicture");
     if (storedProfilePicture) {
       setProfilePicture(storedProfilePicture);
     } else if (userDetails?.profilePicture) {

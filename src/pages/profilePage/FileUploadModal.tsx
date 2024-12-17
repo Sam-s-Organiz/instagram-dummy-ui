@@ -19,6 +19,7 @@ const FileUploadModal = ({ userId, onClose, token }: FileUploadModalProps) => {
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
+    console.log("file",file)
     if (file) {
       setSelectedFile(file);
     }
