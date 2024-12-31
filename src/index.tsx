@@ -7,19 +7,22 @@ import "./app/globals.css";
 
 const Home: NextPage = () => {
   const router = useRouter();
-  const { data: session } = useSession();
-
+  const { data: session, status } = useSession();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    router.push("/home");
-  });
+    if (status === "authenticated") {
+      router.push("/home");
+    }
+  }, [status, router]);
 
   useEffect(() => {
-    const handleStart = (url: string) =>
-      url !== router.asPath && setLoading(true);
-    const handleComplete = (url: string) =>
-      url === router.asPath && setLoading(false);
+    const handleStart = (url: string) => {
+      if (url !== router.asPath) setLoading(true);
+    };
+    const handleComplete = (url: string) => {
+      if (url === router.asPath) setLoading(false);
+    };
 
     router.events.on("routeChangeStart", handleStart);
     router.events.on("routeChangeComplete", handleComplete);
@@ -30,9 +33,14 @@ const Home: NextPage = () => {
       router.events.off("routeChangeComplete", handleComplete);
       router.events.off("routeChangeError", handleComplete);
     };
-  });
+  }, [router]);
 
-  return loading ? <LoadingTruck /> : <div>Hello, again, Insta Users!</div>;
+  // Show loading spinner if session is loading or if we're redirecting
+  if (status === "loading" || loading) {
+    return <LoadingTruck />;
+  }
+
+  return <div>Hello, again, Insta Users!</div>;
 };
 
 export default Home;

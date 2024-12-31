@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
+import { signIn } from "next-auth/react";
 import styles from "./authentication.module.css";
 
 const Authentication = () => {
@@ -7,17 +8,13 @@ const Authentication = () => {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  const handleSignUpClick = () => {
-    setIsSignUp(true);
-  };
-
-  const handleSignInClick = () => {
-    setIsSignUp(false);
-  };
+  const handleSignUpClick = () => setIsSignUp(true);
+  const handleSignInClick = () => setIsSignUp(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+
     const requestData: any = {
       email: data.get("email"),
       password: data.get("password"),
@@ -48,6 +45,7 @@ const Authentication = () => {
 
       const result = await response.json();
 
+      // Store user info in localStorage for Email/Password Authentication
       localStorage.setItem(
         "user",
         JSON.stringify({
@@ -61,11 +59,24 @@ const Authentication = () => {
       );
       localStorage.setItem("jwtToken", result.jtwToken);
 
-      if (response.status === 200 || response.status === 201) {
-        router.push("/home");
-      }
+      // Redirect to Home Page
+      router.push("/home");
     } catch (error) {
       setError("Failed to submit form. Please try again.");
+      console.error("Error:", error);
+    }
+  };
+
+   const handleGoogleSignIn = async () => {
+    try {
+      const googleSignInResponse = await signIn("google", { redirect: false });
+      console.log("googleSignInResponse",googleSignInResponse)
+      if (googleSignInResponse?.error) {
+        throw new Error("Google sign-in failed.");
+      }
+      router.push("/home");  
+    } catch (error) {
+      setError("Google sign-in failed. Please try again.");
       console.error("Error:", error);
     }
   };
@@ -80,7 +91,9 @@ const Authentication = () => {
         }`}
       >
         <form className={styles.form} onSubmit={handleSubmit}>
-          <h1 className={styles.title}>Create Account</h1>
+          <h1 className={styles.title}>
+            {isSignUp ? "Create Account" : "Sign In"}
+          </h1>
           {isSignUp && (
             <>
               <input
@@ -125,7 +138,7 @@ const Authentication = () => {
           )}
         </form>
       </div>
-      {/* Sign In Section */}
+
       <div
         className={`${styles.overlayContainer} ${
           isSignUp ? styles.rightPanelActive : ""
@@ -165,6 +178,11 @@ const Authentication = () => {
               </span>
             </p>
           </form>
+
+          {/* Google Sign-In Button */}
+          <button className={styles.button} onClick={handleGoogleSignIn}>
+            Login with Google
+          </button>
         </div>
       </div>
     </div>
