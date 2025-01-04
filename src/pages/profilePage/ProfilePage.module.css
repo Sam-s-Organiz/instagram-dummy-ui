@@ -134,13 +134,13 @@
 }
 
 .urlInput {
-  width: 100%;  
-  padding: 10px;  
-  border: 1px solid #444;  
-  border-radius: 5px;  
-  background-color: #333;  
-  color: #fff;  
-  margin-bottom: 10px;  
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #444;
+  border-radius: 5px;
+  background-color: #333;
+  color: #fff;
+  margin-bottom: 10px;
 }
 
 .postItem {
@@ -227,5 +227,3 @@
 .tabContent {
   margin-top: 20px;
 }
-
-

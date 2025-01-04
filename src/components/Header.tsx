@@ -1,5 +1,5 @@
 import React from "react";
-import { AppBar, Toolbar, Box, Typography, Divider } from "@mui/material";
+import { AppBar, Toolbar, Box, Typography } from "@mui/material";
 import Image from "next/image";
 import styles from "../styles/Header.module.css";
 
@@ -22,12 +22,6 @@ const Header = () => {
               style={{ paddingLeft: "30px" }}
             />
           </Typography>
-
-          <input
-            type="text"
-            placeholder="Search"
-            className={styles.headerSearch}
-          />
         </Box>
       </Toolbar>
     </AppBar>

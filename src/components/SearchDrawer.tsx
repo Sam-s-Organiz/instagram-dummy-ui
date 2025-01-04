@@ -8,6 +8,9 @@ import {
   List,
   ListItem,
   ListItemText,
+  Button,
+  Avatar,
+  Typography,
   CSSObject,
   Theme,
   styled,
@@ -15,12 +18,15 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import axios from "axios";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { debounce } from "lodash";
-import styles from "./SearchBar/SearchBar.module.css"; // Assuming Sidebar module CSS exists
+import styles from "./SearchBar/SearchBar.module.css";
+import { searchUsers } from "@/client/searchClient";
+import { followUser } from "@/client/followUser";
 
 const drawerWidth = 300;
 
+// Drawer Styling
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
   transition: theme.transitions.create("width", {
@@ -64,6 +70,22 @@ const SearchDrawer = ({ isSearchOpen, toggleSearchDrawer }: any) => {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  // Follow/Unfollow handler
+  const handleFollowToggle = async (id: number, followed: boolean) => {
+    try {
+      await followUser(id);
+
+      setResults((prevResults): any =>
+        prevResults.map((user: any) =>
+          user.id === id ? { ...user, followed: !followed } : user
+        )
+      );
+    } catch (error) {
+      console.error("Error updating follow status:", error);
+    }
+  };
+
+  // API Call
   const handleSearch = async (term: string) => {
     if (!term.trim()) {
       setResults([]);
@@ -72,25 +94,16 @@ const SearchDrawer = ({ isSearchOpen, toggleSearchDrawer }: any) => {
 
     setLoading(true);
     try {
-      const token = localStorage.getItem("jwtToken");
-      const response = await axios.post(
-        `http://localhost:8081/api/user/search?term=${term}&start=0&pageSize=10`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setResults(response.data);
+      const data = await searchUsers(term);
+      setResults(data);
     } catch (error) {
-      console.error("Error fetching results:", error);
       setResults([]);
     } finally {
       setLoading(false);
     }
   };
 
+  // Debounced Search
   const debouncedSearch = useCallback(
     debounce((term: string) => handleSearch(term), 500),
     []
@@ -114,11 +127,7 @@ const SearchDrawer = ({ isSearchOpen, toggleSearchDrawer }: any) => {
         <SearchIcon />
       </IconButton>
 
-      <OpenDrawer
-        open={isSearchOpen}
-        variant="permanent"
-        anchor="right"  
-      >
+      <OpenDrawer open={isSearchOpen} variant="permanent" anchor="right">
         <Box p={2} className={styles.drawerStyling}>
           <Box className={styles.toggleButton}>
             <ChevronRightIcon
@@ -155,9 +164,27 @@ const SearchDrawer = ({ isSearchOpen, toggleSearchDrawer }: any) => {
           ) : (
             <List>
               {results.length > 0 ? (
-                results.map((result, index) => (
-                  <ListItem key={index}>
-                    <ListItemText primary={result.username} />
+                results.map((result: any, index: number) => (
+                  <ListItem key={index} alignItems="center">
+                    <Avatar src={result.profilePicture} alt={result.username} />
+                    <Box ml={2} flexGrow={1}>
+                      <Typography variant="body1" fontWeight="bold">
+                        {result.username}
+                        {result.verified && (
+                          <CheckCircleIcon fontSize="small" color="primary" style={{ marginLeft: 4 }} />
+                        )}
+                      </Typography>
+                      {/* <Typography variant="body2" color="textSecondary">
+                        {result.bio || "No bio available"}
+                      </Typography> */}
+                    </Box>
+                    <Button
+                      variant={result.followed ? "contained" : "outlined"}
+                      color={result.followed ? "secondary" : "primary"}
+                      onClick={() => handleFollowToggle(result.id, result.followed)}
+                    >
+                      {result.followed ? "Following" : "Follow"}
+                    </Button>
                   </ListItem>
                 ))
               ) : (

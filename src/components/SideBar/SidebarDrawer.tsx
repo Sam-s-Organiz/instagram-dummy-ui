@@ -18,15 +18,9 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import axios from "axios";
 import { debounce } from "lodash";
-import styles from "./Sidebar.module.css"; // Assuming Sidebar module CSS exists
+import styles from "./Sidebar.module.css";  
 
 const drawerWidth = 300;
-
-interface SidebarDrawerProps {
-  open: boolean;
-  toggleDrawer: () => void;
-}
-
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
@@ -66,7 +60,7 @@ const OpenDrawer = styled(Drawer, {
   }),
 }));
 
-const SearchDrawer = ({ open, toggleDrawer }:SidebarDrawerProps) => {
+const SearchDrawer = () => {
   const [isSearchOpen, setSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);

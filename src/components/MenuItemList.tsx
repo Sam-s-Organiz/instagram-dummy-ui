@@ -1,23 +1,19 @@
-import { List, ListItemButton, Tooltip } from "@mui/material";
+import { Box, List, ListItemButton, Tooltip } from "@mui/material";
 import Link from "next/link";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import styles from "../styles/Sidebar.module.css";
-// Interface for MenuItem object structure
 interface MenuItem {
   title: string;
   path: string;
   icon: React.ReactNode;
-  onClick?: () => void; // Optional onClick handler
+  onClick?: () => void;
 }
 
-// Interface for the props that MenuItemList will receive
 interface MenuItemListProps {
-  menuItems: MenuItem[]; // List of menu items
-  selectedTab: string; // The selected tab (highlighted)
-  handleClick: (title: string) => void; // Function to handle tab click
-  isOpen: boolean; // Whether the sidebar is open or closed
-  toggleSearchDrawer: () => void; // Function to toggle the search drawer
+  menuItems: MenuItem[];
+  selectedTab: string;
+  handleClick: (title: string) => void;
+  isOpen: boolean;
+  toggleSearchDrawer: () => void;
 }
 
 const MenuItemList = ({
@@ -25,7 +21,7 @@ const MenuItemList = ({
   selectedTab,
   handleClick,
   isOpen,
- }: MenuItemListProps) => {
+}: MenuItemListProps) => {
   return (
     <List>
       {menuItems.map((menu) => (
@@ -38,15 +34,15 @@ const MenuItemList = ({
           }
           onClick={() => {
             handleClick(menu.title);
-            if (menu.onClick) menu.onClick(); // If onClick exists, call it
+            if (menu.onClick) menu.onClick();
           }}
         >
           <Link href={menu.path} passHref style={{ textDecoration: "none" }}>
             <Tooltip title={!isOpen && menu.title} placement="right">
-              <div className={styles.listItemText}>
+              <Box className={styles.listItemText}>
                 <span>{menu.icon}</span>
                 {isOpen && <span className={styles.title}>{menu.title}</span>}
-              </div>
+              </Box>
             </Tooltip>
           </Link>
         </ListItemButton>
