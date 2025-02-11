@@ -27,7 +27,7 @@
     "jotai-immer": "^0.2.0",
     "jspdf": "^2.5.1",
     "next": "^14.2.24",
-    "next-auth": "^4.24.7",
+    "next-auth": "^4.24.11",
     "next-http-proxy-middleware": "^1.2.5",
     "react": "^17.0.0 || ^18.0.0",
     "react-dom": "^17.0.0 || ^18.0.0",
