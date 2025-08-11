@@ -1,8 +1,6 @@
-import { AppProps } from 'next/app';
-import './globals.css'; // Adjust the path as per your setup
+ import './globals.css';
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+ export default function HomePage() {
+  return <div>Home Page</div>;
 }
 
-export default MyApp;
