@@ -3,7 +3,11 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const RightPanel = () => {
-  const [users, setUsers] = useState([]);
+  interface User {
+    name: string;
+  }
+
+  const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
     axios.get('/api/users')

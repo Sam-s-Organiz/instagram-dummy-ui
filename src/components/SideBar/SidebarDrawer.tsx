@@ -63,7 +63,7 @@ const OpenDrawer = styled(Drawer, {
 const SearchDrawer = () => {
   const [isSearchOpen, setSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<{ username: string }[]>([]);
   const [loading, setLoading] = useState(false);
 
   const toggleSearchDrawer = useCallback(() => {
