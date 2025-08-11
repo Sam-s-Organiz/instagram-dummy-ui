@@ -2,11 +2,14 @@
   "name": "instagram-dummy",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://Sam-s-Organiz.github.io/instagram-dummy-ui",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@azure/msal-node": "^1.17.2",
@@ -18,7 +21,6 @@
     "@mui/x-date-pickers": "^6.13.0",
     "axios": "^1.7.9",
     "dotenv": "^16.3.1",
-    "gh-pages": "^6.3.0",
     "html2canvas": "^1.4.1",
     "jotai": "^2.0.4",
     "jotai-immer": "^0.2.0",
@@ -44,6 +46,7 @@
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
+    "gh-pages": "^6.3.0",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
