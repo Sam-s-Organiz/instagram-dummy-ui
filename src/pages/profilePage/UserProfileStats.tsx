@@ -6,7 +6,7 @@ import { useApi } from "@/client/getFollowDetails";
 import { useRouter } from "next/router";
 
 interface UserProfileStatsProps {
-  userDetails: User;
+  userDetails?: User | null;
 }
 
 const UserProfileStats = ({ userDetails }: UserProfileStatsProps) => {
@@ -15,14 +15,24 @@ const UserProfileStats = ({ userDetails }: UserProfileStatsProps) => {
   const { getFollowCounts } = useApi();
   const router = useRouter();
 
+  // Early return if no user details
+  if (!userDetails) {
+    return <div>No user data available</div>;
+  }
+
   useEffect(() => {
     let isMounted = true;
 
     const loadUserStats = async () => {
       try {
         setError(null);
+        // Check if userDetails and id exist
+        if (!userDetails?.id) {
+          throw new Error("User ID is required");
+        }
+        
         const data = await getFollowCounts(userDetails.id);
-        if (isMounted) {
+        if (isMounted && data) {
           setUserStats(data);
         }
       } catch (error: any) {
@@ -35,14 +45,14 @@ const UserProfileStats = ({ userDetails }: UserProfileStatsProps) => {
       }
     };
 
-    if (userDetails.id) {
+    if (userDetails?.id) {
       loadUserStats();
     }
 
     return () => {
       isMounted = false;
     };
-  }, [userDetails.id]);
+  }, [userDetails?.id, getFollowCounts, router]);
 
   if (error) {
     return <div className={styles.error}>{error}</div>;
@@ -60,12 +70,12 @@ const UserProfileStats = ({ userDetails }: UserProfileStatsProps) => {
         <button className={styles.profileButton}>View archive</button>
       </Box>
       <Box className={styles.profileStats}>
-        <span className={styles.stat}>{userStats.postCount} posts</span>
+        <span className={styles.stat}>{userStats.postCount ?? 0} posts</span>
         <span className={styles.stat}>
-          {userStats.followersCount} followers
+          {userStats.followersCount ?? 0} followers
         </span>
         <span className={styles.stat}>
-          {userStats.followingCount} following
+          {userStats.followingCount ?? 0} following
         </span>
       </Box>
       <Box className={styles.profileBio}>
@@ -74,6 +84,10 @@ const UserProfileStats = ({ userDetails }: UserProfileStatsProps) => {
       </Box>
     </Box>
   );
+};
+
+UserProfileStats.defaultProps = {
+  userDetails: null,
 };
 
 export default UserProfileStats;
