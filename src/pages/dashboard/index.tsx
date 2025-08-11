@@ -1,159 +1,141 @@
-import React, { useState } from "react";
-import styles from "./dashboard.module.css";
+import * as React from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-const Dashboard = () => {
-  const [isSignUp, setIsSignUp] = useState(false); // State to manage form type
-  const [error, setError] = useState<string | null>(null); // Error state
+function Copyright(props: any) {
+  return (
+    <Typography
+      variant="body2"
+      color="text.secondary"
+      align="center"
+      {...props}
+    >
+      {"Copyright © "}
+      <Link color="inherit" href="https://mui.com/">
+        Your Website
+      </Link>{" "}
+      {new Date().getFullYear()}
+      {"."}
+    </Typography>
+  );
+}
 
-  const handleSignUpClick = () => {
-    setIsSignUp(true);
-  };
+// TODO remove, this demo shouldn't need to reset the theme.
 
-  const handleSignInClick = () => {
-    setIsSignUp(false);
-  };
+const defaultTheme = createTheme();
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+export default function SignUp() {
+  const handleSubmit = (event: any) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const requestData: any = {
-      email: data.get("email"),
-      password: data.get("password"),
-    };
-
-    // Add username and bio only for sign-up
-    if (isSignUp) {
-      requestData.username = data.get("username");
-      requestData.bio = data.get("bio") || null; // Bio is optional
-    }
-
-    const endpoint = isSignUp ? "http://localhost:8081/api/user/register" : "http://localhost:8081/api/user/login";  
-
-    try {
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestData),
-      });
-      
-      console.log("Response", response);
-      if (!response.ok) {
-        const message = `Error: ${response.statusText}`;
-        throw new Error(message);
-      }
-
-      const result = await response.json();
-      console.log("Success:", result);
-
-      // Handle success (e.g., redirect, store token, etc.)
-      if (isSignUp) {
-        alert("Account created successfully!");
-      } else {
-        alert("Signed in successfully!");
-        // Optionally store user token or details in local storage
-      }
-
-    } catch (error) {
-      setError("Failed to submit form. Please try again.");
-      console.error("Error:", error);
-    }
   };
 
   return (
-    <div className={styles.container}>
-      {error && <p className={styles.error}>{error}</p>} {/* Display error message */}
-
-      {/* Sign Up Form */}
-      <div className={`${styles.formContainer} ${isSignUp ? styles.rightPanelActive : ""}`}>
-        <form className={styles.form} onSubmit={handleSubmit}>
-          <h1 className={styles.title}>Create Account</h1>
-          {isSignUp && (
-            <>
-              <input
-                className={styles.input}
-                name="username"
-                type="text"
-                placeholder="Username"
-                required
-              />
-              <input
-                className={styles.input}
-                name="bio"
-                type="text"
-                placeholder="Bio (optional)"
-              />
-            </>
-          )}
-          <input
-            className={styles.input}
-            name="email"
-            type="email"
-            placeholder="Email"
-            required
-          />
-          <input
-            className={styles.input}
-            name="password"
-            type="password"
-            placeholder="Password"
-            required
-          />
-          <button className={styles.button} type="submit">
-            {isSignUp ? "Sign Up" : "Sign In"}
-          </button>
-          {isSignUp && (
-            <p className={styles.text}>
-              Already have an account?{" "}
-              <span className={styles.forgot} onClick={handleSignInClick}>
-                Sign In
-              </span>
-            </p>
-          )}
-        </form>
-      </div>
-
-      {/* Sign In Section */}
-      <div className={`${styles.overlayContainer} ${isSignUp ? styles.rightPanelActive : ""}`}>
-        <div className={styles.overlay}>
-          <h1 className={styles.title}>Welcome Back!</h1>
-          <p className={styles.description}>
-            To keep connected with us please login with your personal info
-          </p>
-          <form className={styles.form} onSubmit={handleSubmit}>
-            {!isSignUp && (
-              <>
-                <input
-                  className={styles.input}
+    <ThemeProvider theme={defaultTheme}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign up
+          </Typography>
+          <Box
+            component="form"
+            noValidate
+            onSubmit={handleSubmit}
+            sx={{ mt: 3 }}
+          >
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  autoComplete="given-name"
+                  name="firstName"
+                  required
+                  fullWidth
+                  id="firstName"
+                  label="First Name"
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="lastName"
+                  label="Last Name"
+                  name="lastName"
+                  autoComplete="family-name"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
                   name="email"
-                  type="email"
-                  placeholder="Email"
-                  required
+                  autoComplete="email"
                 />
-                <input
-                  className={styles.input}
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
                   name="password"
+                  label="Password"
                   type="password"
-                  placeholder="Password"
-                  required
+                  id="password"
+                  autoComplete="new-password"
                 />
-              </>
-            )}
-            <button className={styles.button} type="submit">
-              Sign In
-            </button>
-            <p className={styles.text}>
-              Don't have an account?{" "}
-              <span className={styles.forgot} onClick={handleSignUpClick}>
-                Sign Up
-              </span>
-            </p>
-          </form>
-        </div>
-      </div>
-    </div>
+              </Grid>
+              <Grid item xs={12}>
+                <FormControlLabel
+                  control={
+                    <Checkbox value="allowExtraEmails" color="primary" />
+                  }
+                  label="I want to receive inspiration, marketing promotions and updates via email."
+                />
+              </Grid>
+            </Grid>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign Up
+            </Button>
+            <Grid container justifyContent="flex-end">
+              <Grid item>
+                <Link href="#" variant="body2">
+                  Already have an account? Sign in
+                </Link>
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
+        <Copyright sx={{ mt: 5 }} />
+      </Container>
+    </ThemeProvider>
   );
-};
-
-export default Dashboard;
+}

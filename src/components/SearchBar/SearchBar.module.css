@@ -1,0 +1,23 @@
+.container {
+    display: flex;
+    align-items: center;
+    background-color: #2e2e2e;
+    padding: 8px;
+    border-radius: 8px;
+    width: 100%;
+  }
+  
+  .input {
+    flex-grow: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    padding: 4px;
+  }
+  
+  .icon {
+    color: gray;
+    cursor: pointer;
+  }
+  

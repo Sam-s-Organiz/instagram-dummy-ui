@@ -11,6 +11,7 @@ self.__BUILD_MANIFEST = {
     "static/chunks/webpack.js",
     "static/chunks/main-app.js"
   ],
+  "rootMainFilesTree": {},
   "pages": {
     "/_app": [
       "static/chunks/webpack.js",
@@ -21,6 +22,11 @@ self.__BUILD_MANIFEST = {
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
+    ],
+    "/authentication": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/authentication.js"
     ],
     "/home": [
       "static/chunks/webpack.js",

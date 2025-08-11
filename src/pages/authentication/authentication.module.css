@@ -21,7 +21,7 @@
 
 .formContainer:nth-child(2) {
   left: 50%;
-  background: linear-gradient(to right, #ff69b4, #ff99cc);
+  background: linear-gradient(to right, #b77fe6, #ff99cc);
   transform: translateX(0);
 }
 

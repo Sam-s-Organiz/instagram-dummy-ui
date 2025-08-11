@@ -1,0 +1,23 @@
+.container {
+    width: 64px;
+    height: 100vh;
+    background-color: black;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 16px;
+  }
+  
+  .iconContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  .bottomIcons {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  

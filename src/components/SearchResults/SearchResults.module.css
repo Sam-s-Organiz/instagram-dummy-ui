@@ -1,0 +1,17 @@
+.container {
+    padding: 16px;
+    color: gray;
+  }
+  
+  .resultItem {
+    padding: 8px 0;
+    border-bottom: 1px solid #333;
+    color: white;
+  }
+  
+  .noResults {
+    text-align: center;
+    padding: 20px;
+    color: gray;
+  }
+  
