@@ -31,7 +31,7 @@ const HomePage = () => {
   }, []);
 
   const { data: posts, error } = useSWR(
-    userId && token ? `http://localhost:8081/api/posts/user/${userId}` : null,
+    userId && token ? `http://localhost:8081/api/posts/user/feeds` : null,
     (url) => fetcher(url, token),
     { shouldRetryOnError: false }
   );

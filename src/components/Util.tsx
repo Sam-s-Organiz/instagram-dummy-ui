@@ -10,20 +10,43 @@ export default interface User {
   followingCount: number;
 }
 
-export const getMimeType = (url: string): string => {
+function getMimeType(url: string): string {
   const extension = url.split(".").pop()?.toLowerCase();
+
   switch (extension) {
-    case "png":
-      return "image/png";
     case "jpg":
     case "jpeg":
+    case "jfif":
       return "image/jpeg";
+    case "png":
+      return "image/png";
     case "gif":
       return "image/gif";
+    case "bmp":
+      return "image/bmp";
+    case "webp":
+      return "image/webp";
+    case "svg":
+      return "image/svg+xml";
+    case "heic":
+      return "image/heic";
+    case "avif":
+      return "image/avif";
+    case "tif":
+    case "tiff":
+      return "image/tiff";
+    case "ico":
+      return "image/x-icon";
+    case "pnm":
+      return "image/x-portable-anymap";
+    case "ppm":
+      return "image/x-portable-pixmap";
+    case "pgm":
+      return "image/x-portable-graymap";
     default:
-      return "image/jpeg";
+      return "application/octet-stream"; // fallback for unknown types
   }
-};
+}
 
 // Function to get image source
 export const getImageSrc = (post: {
@@ -32,14 +55,22 @@ export const getImageSrc = (post: {
 }): string | null => {
   const cleanImageUrl = post.imageUrl?.replace(/"/g, "").trim();
 
-  let imageSrc = cleanImageUrl;
-  let mimeType = cleanImageUrl ? getMimeType(cleanImageUrl) : "image/jpeg";
-
-  if (post.fileData) {
-    imageSrc = `data:${mimeType};base64,${post.fileData}`;
+  // If there's base64 data, use that
+  if (post.fileData && cleanImageUrl) {
+    const mimeType = getMimeType(cleanImageUrl);
+    return `data:${mimeType};base64,${post.fileData}`;
   }
 
-  return imageSrc || null;
+  // If there's a public image URL path, resolve it fully
+  if (cleanImageUrl) {
+    const baseUrl = "http://localhost:8081"; // Change if your backend URL differs
+    if (cleanImageUrl.startsWith("http")) {
+      return cleanImageUrl;
+    }
+    return `${baseUrl}${cleanImageUrl}`;
+  }
+
+  return null;
 };
 
 import HomeIcon from "@mui/icons-material/Home";

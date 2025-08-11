@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styles from "../styles/Post.module.css";
 import { getImageSrc } from "./Util";
-import { followUser, likeParticularPost } from "@/client/getFollowDetails";
+import { useApi } from "@/client/getFollowDetails";
+import { Box } from "@mui/material";
 
 interface PostProps {
   post: {
@@ -18,7 +19,8 @@ const Post = ({ post }: PostProps) => {
   const [isFollowing, setIsFollowing] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(post.likeCount);
-  const storedToken = localStorage.getItem("jwtToken");
+  const { followUser, likeParticularPost } = useApi();
+
   const handleFollow = async () => {
     const action = isFollowing ? "unfollow" : "follow";
     try {
@@ -37,15 +39,7 @@ const Post = ({ post }: PostProps) => {
     setLikeCount((prev) => prev + 1);
 
     try {
-      if (!storedToken) {
-        throw new Error("User is not authenticated.");
-      }
-
-      const response = await likeParticularPost(post.id, storedToken);
-
-      if (response.status !== 200) {
-        throw new Error(`API failed with status: ${response.status}`);
-      }
+      await likeParticularPost(post.id);
     } catch (error: any) {
       console.error("Error liking post:", error.message || error);
       setIsLiked(false);
@@ -60,7 +54,7 @@ const Post = ({ post }: PostProps) => {
   const imageSrc = getImageSrc(post);
 
   return (
-    <div className={styles.postContainer}>
+    <Box className={styles.postContainer}>
       <h2 className={styles.username}>{post.username}</h2>
       {imageSrc && (
         <img
@@ -71,7 +65,7 @@ const Post = ({ post }: PostProps) => {
       )}
       <p className={styles.caption}>{post.caption || "No caption provided"}</p>
 
-      <div className={styles.actions}>
+      <Box className={styles.actions}>
         <button
           onClick={handleFollow}
           className={isFollowing ? styles.unfollowButton : styles.followButton}
@@ -85,8 +79,8 @@ const Post = ({ post }: PostProps) => {
         >
           {isLiked ? `Liked (${likeCount})` : `Like (${likeCount})`}
         </button>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

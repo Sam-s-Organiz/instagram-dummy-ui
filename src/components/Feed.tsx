@@ -7,7 +7,7 @@ const Feed = () => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    axios.get('/api/posts')
+    axios.get('/api/posts/user/feeds')
       .then(response => {
         setPosts(response.data);
       })

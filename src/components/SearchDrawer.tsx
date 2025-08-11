@@ -22,7 +22,16 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { debounce } from "lodash";
 import styles from "./SearchBar/SearchBar.module.css";
 import { searchUsers } from "@/client/searchClient";
-import { followUser } from "@/client/followUser";
+import { followUser, unfollowUser } from "@/client/followUser";
+
+// Add this interface near the top of the file, after the imports
+interface SearchResult {
+  id: number;
+  username: string;
+  profilePicture?: string;
+  verified?: boolean;
+  followed: boolean;
+}
 
 const drawerWidth = 300;
 
@@ -67,14 +76,18 @@ const OpenDrawer = styled(Drawer, {
 
 const SearchDrawer = ({ isSearchOpen, toggleSearchDrawer }: any) => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
 
   // Follow/Unfollow handler
   const handleFollowToggle = async (id: number, followed: boolean) => {
     try {
-      await followUser(id);
-
+      if (followed) {
+        await unfollowUser(id);
+      } else {
+        await followUser(id);
+      }
+  
       setResults((prevResults): any =>
         prevResults.map((user: any) =>
           user.id === id ? { ...user, followed: !followed } : user
@@ -84,6 +97,7 @@ const SearchDrawer = ({ isSearchOpen, toggleSearchDrawer }: any) => {
       console.error("Error updating follow status:", error);
     }
   };
+  
 
   // API Call
   const handleSearch = async (term: string) => {

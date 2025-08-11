@@ -1,4 +1,5 @@
 import { useAuthToken } from "./useAuthToken";
+import React from "react";
 
 const apiBaseUrl = "http://localhost:8081/api";
 
@@ -9,6 +10,7 @@ const makeApiRequest = async (
   body?: any
 ) => {
   if (!token) {
+    window.location.href = "/login";
     throw new Error("User is not authenticated. Please log in.");
   }
 
@@ -23,40 +25,47 @@ const makeApiRequest = async (
     body: body ? JSON.stringify(body) : null,
   };
 
-  const response = await fetch(url, requestOptions);
+  const response = await fetch(`${apiBaseUrl}${url}`, requestOptions);
 
   if (!response.ok) {
-    if (response.status === 401) {
-      throw new Error("Unauthorized. Please log in.");
-    } else if (response.status === 404) {
-      throw new Error("User not found or Post not found");
-    }
-    throw new Error("Request failed");
+    const errorMessages: Record<number, string> = {
+      401: "Unauthorized. Please log in.",
+      404: "User not found or Post not found",
+    };
+    throw new Error(errorMessages[response.status] || "Request failed");
   }
 
   return response.status === 204 ? null : await response.json();
 };
 
-export const followUser = async (followerId: number) => {
+// Helper function to create API endpoints
+const createApiEndpoint = (path: string) => `${apiBaseUrl}${path}`;
+
+// API functions using the token from hook
+const useApi = () => {
   const token = useAuthToken();
-  const url = `${apiBaseUrl}/user/follow/${followerId}`;
-  return await makeApiRequest(url, "POST", token);
+
+  const api = React.useMemo(
+    () => ({
+      followUser: async (targetUserId: number) =>
+        makeApiRequest(`/follow/${targetUserId}`, "POST", token),
+
+      unfollowUser: async (targetUserId: number) =>
+        makeApiRequest(`/follow/${targetUserId}`, "DELETE", token),
+
+      getFollowCounts: async (userId: number) =>
+        makeApiRequest(`/follow/counts/${userId}`, "GET", token),
+
+      likeParticularPost: async (postId: number) =>
+        makeApiRequest(`/like/post/${postId}`, "PUT", token),
+
+      getLikeStatus: async (postId: number) =>
+        makeApiRequest(`/like/post/${postId}/status`, "GET", token),
+    }),
+    [token]
+  );
+
+  return api;
 };
 
-export const getFollowCounts = async (userId: number, token: string) => {
-  const url = `${apiBaseUrl}/user/follow/count/${userId}`;
-  return await makeApiRequest(url, "GET", token);
-};
-
-export const likeParticularPost = async (postID: number, token: string) => {
-  const url = `${apiBaseUrl}/like/post/${postID}`;
-  const response = await makeApiRequest(url, "POST", token);
-  return response;
-};
-
-export const getLikeParticularPost = async (postID: number) => {
-  const token = useAuthToken();
-  const url = `${apiBaseUrl}/like/post/${postID}`;
-  const response = await makeApiRequest(url, "POST", token);
-  return response ? response : "Post liked successfully";
-};
+export { useApi };

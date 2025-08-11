@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import styles from "./ProfilePage.module.css";
 import User from "@/components/Util";
-import { getFollowCounts } from "@/client/getFollowDetails";
+import { useApi } from "@/client/getFollowDetails";
+import { useRouter } from "next/router";
 
 interface UserProfileStatsProps {
   userDetails: User;
@@ -10,21 +11,43 @@ interface UserProfileStatsProps {
 
 const UserProfileStats = ({ userDetails }: UserProfileStatsProps) => {
   const [userStats, setUserStats] = useState<User | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const { getFollowCounts } = useApi();
+  const router = useRouter();
 
   useEffect(() => {
+    let isMounted = true;
+
     const loadUserStats = async () => {
       try {
-        const data = await getFollowCounts(userDetails.id,userDetails.token);
-        setUserStats(data);
-      } catch (error) {
-        console.error("Error loading user stats:", error);
+        setError(null);
+        const data = await getFollowCounts(userDetails.id);
+        if (isMounted) {
+          setUserStats(data);
+        }
+      } catch (error: any) {
+        if (isMounted) {
+          setError(error.message);
+          if (error.message.includes("not authenticated")) {
+            router.push("/login");
+          }
+        }
       }
     };
 
-    loadUserStats();
-  }, [userDetails.id, userDetails.token]);
+    if (userDetails.id) {
+      loadUserStats();
+    }
 
-  console.log("userDetailsBiiiio", userStats);
+    return () => {
+      isMounted = false;
+    };
+  }, [userDetails.id]);
+
+  if (error) {
+    return <div className={styles.error}>{error}</div>;
+  }
+
   if (!userStats) {
     return <div>Loading...</div>;
   }

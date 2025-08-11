@@ -25,6 +25,13 @@ const Authentication = () => {
       requestData.bio = data.get("bio") || null;
     }
 
+    const tenantId = "INST_GR"
+
+    if (!tenantId) {
+      setError("Tenant ID is required.");
+      return;
+    }
+
     const endpoint = isSignUp
       ? "http://localhost:8081/api/user/register"
       : "http://localhost:8081/api/user/login";
@@ -34,6 +41,7 @@ const Authentication = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "X-Tenant-Id": tenantId,  
         },
         body: JSON.stringify(requestData),
       });
@@ -52,12 +60,12 @@ const Authentication = () => {
           id: result.id,
           username: result.username,
           email: result.email,
-          token: result.jtwToken,
+          token: result.jwtToken,
           profilePicture: result.profilePicture,
           bio: result.bio,
         })
       );
-      localStorage.setItem("jwtToken", result.jtwToken);
+      localStorage.setItem("jwtToken", result.jwtToken);
 
       // Redirect to Home Page
       router.push("/home");
@@ -67,14 +75,14 @@ const Authentication = () => {
     }
   };
 
-   const handleGoogleSignIn = async () => {
+  const handleGoogleSignIn = async () => {
     try {
       const googleSignInResponse = await signIn("google", { redirect: false });
-      console.log("googleSignInResponse",googleSignInResponse)
+      console.log("googleSignInResponse", googleSignInResponse);
       if (googleSignInResponse?.error) {
         throw new Error("Google sign-in failed.");
       }
-      router.push("/home");  
+      router.push("/home");
     } catch (error) {
       setError("Google sign-in failed. Please try again.");
       console.error("Error:", error);
